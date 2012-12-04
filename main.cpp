@@ -8,6 +8,22 @@
 Shader shader;
 GLfloat angle = 0.0;
 
+// diffuse
+GLfloat dlr = 1.0;
+GLfloat dlg = 1.0;
+GLfloat dlb = 1.0;
+
+// ambient light color variables
+GLfloat alr = 0.0;
+GLfloat alg = 0.0;
+GLfloat alb = 0.0;
+
+// light position variables
+GLfloat lx = 0.0;
+GLfloat ly = 1.0;
+GLfloat lz = 1.0;
+GLfloat lw = 0.0;
+
 void init()
 {
 	glEnable(GL_DEPTH_TEST);
@@ -25,6 +41,20 @@ void cube()
 	glutWireCube(2);
 }
 
+void setLighting()
+{
+	Glfloat DiffuseLight[] = { dlr, dlg, dlb };
+	Glfloat AmbientLight[] = { alr, alg, alb };
+
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, DiffuseLight);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, AmbientLight);
+
+	GLfloat LightPosition[] = { lx, ly, lz, lw };
+	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
+
+
+}
+
 
 void display()
 {
@@ -33,6 +63,7 @@ void display()
 	glLoadIdentity();
 	gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
+	setLighting();
 
 	shader.bind();
 	cube();
@@ -50,7 +81,6 @@ void reshape(int w, int h)
 	gluPerspective(60, GLfloat(w)/GLfloat(h), 1.0, 100.0 );
 	glMatrixMode(GL_MODELVIEW);
 }
-
 
 int main(int argc, char* argv[])
 {
