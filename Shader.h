@@ -17,6 +17,7 @@ public:
 private:
 	void SetupShader(unsigned int shader_p, const char* filename );
 	void validateShader( unsigned int shader, const char* file = 0 );
+	void validateProgram( unsigned int program );
 	unsigned int shader_id;
 	unsigned int shader_vp;
 	unsigned int shader_fp;

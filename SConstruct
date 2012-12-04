@@ -3,6 +3,7 @@ import os
 env = Environment()
 env['CC'] = 'clang'
 env['CXX'] = 'clang++'
+env['CXXFLAGS'] = '-Weverything'
 env['ENV']['TERM'] = os.environ['TERM']
 
 

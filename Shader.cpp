@@ -40,6 +40,7 @@ void Shader::init( const char* vsFile, const char* fsFile )
 	glAttachShader(shader_id, shader_fp);
 	glAttachShader(shader_id, shader_vp);
 	glLinkProgram(shader_id);
+	validateProgram(shader_id);
 }
 
 void Shader::SetupShader( unsigned int shader_p, const char* filename )
@@ -54,21 +55,36 @@ void Shader::SetupShader( unsigned int shader_p, const char* filename )
 	);
 
 	const char* text = sText.c_str();
-	std::cout << sText << std::endl;
 
 	glShaderSource(shader_p, 1, &text, 0);
 	glCompileShader(shader_p);
+	validateShader(shader_p);
 }
 
-void Shader::validateShader( unsigned int, const char* file /* = 0 */)
+void Shader::validateShader( unsigned int shader, const char* file /* = 0 */)
 {
 	const unsigned int BUFFER_SIZE = 512;
 	char buffer[BUFFER_SIZE];
-	//memset(buffer, 0, BUFFER_SIZE);
 
+	GLsizei length = 0;
+	glGetShaderInfoLog(shader, BUFFER_SIZE, &length, buffer);
+	file = file?file:"";
+	if(length > 1)
+		std::cerr << "shader " << shader << file << "compile error:" << buffer << std::endl;
 }
 
-void Shader::Shader::bind()
+void Shader::validateProgram( unsigned int program )
+{
+	const unsigned int BUFFER_SIZE = 512;
+	char buffer[BUFFER_SIZE];
+
+	GLsizei length = 0;
+	glGetProgramInfoLog(program, BUFFER_SIZE, &length, buffer);
+	if(length > 0)
+		std::cerr << "Program " << program << " link error: " << buffer << std::endl;
+}
+
+void Shader::bind()
 {
 	glUseProgram(shader_id);
 }
