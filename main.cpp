@@ -13,15 +13,6 @@
 Shader shader;
 GLfloat angle = 0.0;
 
-// diffuse
-GLfloat dlr = 1.0;
-GLfloat dlg = 1.0;
-GLfloat dlb = 1.0;
-
-// ambient light color variables
-GLfloat alr = 0.0;
-GLfloat alg = 0.0;
-GLfloat alb = 0.0;
 
 // light position variables
 GLfloat lx = 0.0;
@@ -34,6 +25,9 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+
 	shader.init("shader.vert", "shader.frag");
 }
 
@@ -42,19 +36,30 @@ void cube()
 	glRotatef(angle, 1.0, 0.0, 0.0);
 	glRotatef(angle, 0.0, 1.0, 0.0);
 	glRotatef(angle, 0.0, 0.0, 1.0);
-	glColor4f(1.0, 0.0, 0.0, 1.0);
-	//glutWireCube(2);
-	//glutSolidSphere(2,10,10);
-	glutSolidTeapot(2);
+
+	GLfloat mShininess[] = {50};
+
+	GLfloat DiffuseMaterial[] = {1.0, 0.0, 0.0};
+	GLfloat AmbientMaterial[] = {0.0, 1.0, 0.0};
+	GLfloat SpecularMaterial[] = {0.0, 0.0, 1.0};
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DiffuseMaterial);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AmbientMaterial);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SpecularMaterial);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mShininess);
+
+	glutSolidTeapot(2.0);
 }
 
 void setLighting()
 {
-	GLfloat DiffuseLight[] = { dlr, dlg, dlb };
-	GLfloat AmbientLight[] = { alr, alg, alb };
+	GLfloat DiffuseLight[] = { 1.0, 1.0, 1.0 };
+	GLfloat AmbientLight[] = { 0.2, 0.2, 0.2 };
+	GLfloat SpecularLight[] = { 1.0, 1.0, 1.0 };
 
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, DiffuseLight);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, AmbientLight);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, AmbientLight);
 
 	GLfloat LightPosition[] = { lx, ly, lz, lw };
 	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
