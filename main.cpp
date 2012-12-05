@@ -43,7 +43,8 @@ void cube()
 	glRotatef(angle, 0.0, 1.0, 0.0);
 	glRotatef(angle, 0.0, 0.0, 1.0);
 	glColor4f(1.0, 0.0, 0.0, 1.0);
-	glutWireCube(2);
+	//glutWireCube(2);
+	glutSolidSphere(2,10,10);
 }
 
 void setLighting()

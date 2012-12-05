@@ -75,7 +75,7 @@ void Shader::validateShader( unsigned int shader, const char* file /* = 0 */)
 	glGetShaderInfoLog(shader, BUFFER_SIZE, &length, buffer);
 	file = file?file:"";
 	if(length > 1)
-		std::cerr << "shader " << shader << file << "compile error:" << buffer << std::endl;
+		std::cerr << "shader " << shader << file << " compile error:" << buffer << std::endl;
 }
 
 void Shader::validateProgram( unsigned int program )
