@@ -1,9 +1,14 @@
 #include "Shader.h"
+#if( (defined(__MACH__)) && (defined(__APPLE__)) )
+#include <OpenGL/gl.h>
+#include <GLUT/glut.h>
+#include <OpenGL/glext.h>
+#else
 #include <GL/glew.h>
-#include <GL/gl.h>
 #include <GL/glut.h>
 #include <GL/glext.h>
-
+#include <GL/glew.h>
+#endif
 
 Shader shader;
 GLfloat angle = 0.0;
@@ -43,18 +48,15 @@ void cube()
 
 void setLighting()
 {
-	Glfloat DiffuseLight[] = { dlr, dlg, dlb };
-	Glfloat AmbientLight[] = { alr, alg, alb };
+	GLfloat DiffuseLight[] = { dlr, dlg, dlb };
+	GLfloat AmbientLight[] = { alr, alg, alb };
 
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, DiffuseLight);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, AmbientLight);
 
 	GLfloat LightPosition[] = { lx, ly, lz, lw };
 	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
-
-
 }
-
 
 void display()
 {
@@ -91,8 +93,9 @@ int main(int argc, char* argv[])
 	glutInitWindowPosition(100,100);
 	glutCreateWindow("A basic OpenGL Window");
 
+#ifndef __APPLE__
 	glewInit();
-
+#endif
 	glutDisplayFunc(display);
 	glutIdleFunc(display);
 	glutReshapeFunc(reshape);

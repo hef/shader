@@ -1,9 +1,14 @@
 #include "Shader.h"
-
-#include <stdlib.h>
+#if( (defined(__MACH__)) && (defined(__APPLE__)) )
+#include <OpenGL/gl.h>
+#include <GLUT/glut.h>
+#include <OpenGL/glext.h>
+#else
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <GL/glext.h>
+#endif
+#include <stdlib.h>
 #include <iostream>
 #include <fstream>
 #include <string>
