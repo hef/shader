@@ -54,7 +54,7 @@ void cube()
 void setLighting()
 {
 	GLfloat DiffuseLight[] = { 1.0, 1.0, 1.0 };
-	GLfloat AmbientLight[] = { 0.2, 0.2, 0.2 };
+	GLfloat AmbientLight[] = { 0.2f, 0.2f, 0.2f };
 	GLfloat SpecularLight[] = { 1.0, 1.0, 1.0 };
 
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, DiffuseLight);
