@@ -1,13 +1,7 @@
 #include "Shader.h"
-#if( (defined(__MACH__)) && (defined(__APPLE__)) )
-#include <OpenGL/gl.h>
-#include <GLUT/glut.h>
-#include <OpenGL/glext.h>
-#else
-#include <GL/glew.h>
-#include <GL/glut.h>
-#include <GL/glext.h>
-#endif
+//#include <GLES2/gl2.h>
+#include <SDL/SDL_opengl.h>
+//#include <GL/glew.h>
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>

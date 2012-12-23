@@ -2,4 +2,8 @@
 *.swp
 *.o
 .sconsign.dblite
-main
+*main
+*main.html
+*.data
+web
+pc

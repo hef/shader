@@ -1,14 +1,6 @@
 #include "Shader.h"
-#if( (defined(__MACH__)) && (defined(__APPLE__)) )
-#include <OpenGL/gl.h>
-#include <GLUT/glut.h>
-#include <OpenGL/glext.h>
-#else
-#include <GL/glew.h>
-#include <GL/glut.h>
-#include <GL/glext.h>
-#include <GL/glew.h>
-#endif
+#include "glheader.h"
+#include <iostream>
 
 Shader shader;
 GLfloat angle = 0.0;
@@ -22,6 +14,13 @@ GLfloat lw = 0.0;
 
 void init()
 {
+	glClearColor(0,0,0,0);
+	glViewport(0,0,640,480);
+	glMatrixMode(GL_PROJECTION);
+	glEnable(GL_TEXTURE_2D);
+	glLoadIdentity();
+
+
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
@@ -33,6 +32,9 @@ void init()
 
 void cube()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+
 	glRotatef(angle, 1.0, 0.0, 0.0);
 	glRotatef(angle, 0.0, 1.0, 0.0);
 	glRotatef(angle, 0.0, 0.0, 1.0);
@@ -48,7 +50,13 @@ void cube()
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SpecularMaterial);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mShininess);
 
-	glutSolidTeapot(2.0);
+	//glutSolidTeapot(2.0);
+	glBegin(GL_QUADS);
+		glColor3f(1,0,0); glVertex3f(0,0,0);
+		glColor3f(1,1,0); glVertex3f(100,0,0);
+		glColor3f(1,0,1); glVertex3f(100,100,0);
+		glColor3f(1,1,1); glVertex3f(0,100,0);
+	glEnd();
 }
 
 void setLighting()
@@ -70,7 +78,7 @@ void display()
 	glClearColor(0.0,0.0,0.0,1.0);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	//gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
 	setLighting();
 
@@ -78,7 +86,8 @@ void display()
 	cube();
 	shader.unbind();
 
-	glutSwapBuffers();
+	//glutSwapBuffers();
+	SDL_GL_SwapBuffers();
 	angle += 0.1f;
 }
 
@@ -87,28 +96,47 @@ void reshape(int w, int h)
 	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60, GLfloat(w)/GLfloat(h), 1.0, 100.0 );
+	//gluPerspective(60, GLfloat(w)/GLfloat(h), 1.0, 100.0 );
 	glMatrixMode(GL_MODELVIEW);
 }
 
 int main(int argc, char* argv[])
 {
-	glutInit(&argc, argv);
+	//glutInit(&argc, argv);
 	
-	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA|GLUT_DEPTH);
-	glutInitWindowSize(500,500);
-	glutInitWindowPosition(100,100);
-	glutCreateWindow("A basic OpenGL Window");
+	//glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA|GLUT_DEPTH);
+	//glutInitWindowSize(500,500);
+	//glutInitWindowPosition(100,100);
+	//glutCreateWindow("A basic OpenGL Window");
+	
+	SDL_Surface* screen;
+	if(SDL_Init(SDL_INIT_VIDEO) != 0)
+		std::cout << "SDL Video: " << SDL_GetError() << std::endl;
+	screen = SDL_SetVideoMode(640,480,32,SDL_OPENGL);
+	if( !screen )
+		std::cout << "SDL Set Video Mode: " << SDL_GetError() << std::endl;
 
-#ifndef __APPLE__
-	glewInit();
+	
+#if USE_GLEW
+	GLenum glewError = glewInit();
+	std::cout << glewGetErrorString(glewError) << std::endl;
 #endif
-	glutDisplayFunc(display);
-	glutIdleFunc(display);
-	glutReshapeFunc(reshape);
+
+	//glutDisplayFunc(display);
+	//glutIdleFunc(display);
+	//glutReshapeFunc(reshape)
+	
+
+	if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
+		return false;
 
 	init();
-	glutMainLoop();
+	//glutMainLoop();
+	
+	while(true)
+	{
+		display();
+	}
 
 	return 0;
 }
